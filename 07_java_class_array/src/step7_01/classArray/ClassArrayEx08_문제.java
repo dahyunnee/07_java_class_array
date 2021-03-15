@@ -14,6 +14,7 @@ import java.util.Scanner;
 //
 
 
+/*
 public class ClassArrayEx08_문제 {
 
 	public static void main(String[] args) {
@@ -47,3 +48,4 @@ public class ClassArrayEx08_문제 {
 	}
 
 }
+*/

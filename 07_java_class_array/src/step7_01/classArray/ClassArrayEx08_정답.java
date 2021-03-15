@@ -3,13 +3,13 @@ package step7_01.classArray;
 import java.util.Scanner;
 
 
-class Subject{
+class Subject8{
 	String name;
 	int score;
 }
 
-class Student{
-	Subject[] subjects;
+class Student8{
+	Subject8[] subjects;
 	String name;
 }
 
@@ -27,7 +27,7 @@ public class ClassArrayEx08_정답 {
 		//   이만수 : 과목2개 수학 20 국어 30 
 		//   이영희 : 과목1개 수학 100
 		
-		Student [] stdList = new Student[3];
+		Student8 [] stdList = new Student8[3];
 		int stdCnt = 0;	// 학생 수
 		
 		while (true) {
@@ -40,7 +40,12 @@ public class ClassArrayEx08_정답 {
 			
 			if		(choice == 1) {
 			
-				stdList[stdCnt] = new Student();
+				if (stdCnt >= 3 ) {
+					
+					System.out.println("학생 수 초과");
+					continue;
+				}
+				stdList[stdCnt] = new Student8();
 
 				System.out.print(" [이름] : ");
 				stdList[stdCnt].name = scan.next();
@@ -48,22 +53,28 @@ public class ClassArrayEx08_정답 {
 				
 				stdCnt ++;
 				
+				System.out.println("[ 학생 리스트 ]");
+				for (int i = 0; i < stdCnt; i++) {
+					
+					System.out.println("[ " + (i+1) + " ]" + stdList[i].name);
+				}
+				
 			}
 			else if (choice == 2) {
 				
 				System.out.println("[ 학생 리스트 ]");
 				for (int i = 0; i < stdCnt; i++) {
 					
-					System.out.println("[ " + (i+1) + " ]" + stdList[stdCnt].name);
+					System.out.println("[ " + (i+1) + " ]" + stdList[i].name);
 				}
 				System.out.print("학생 선택 : ");
 				int getStudentIndex = scan.nextInt() - 1;		//학생인덱스 
 				
-				if ( stdList[getStudentIndex] == null ) {
+				if ( stdList[getStudentIndex].subjects == null ) {
 					
-					stdList[getStudentIndex].subjects = new Subject[1];
+					stdList[getStudentIndex].subjects = new Subject8[1];
 					
-					stdList[getStudentIndex].subjects[0] = new Subject();
+					stdList[getStudentIndex].subjects[0] = new Subject8();
 										
 					System.out.print("[과목명] : ");
 					stdList[getStudentIndex].subjects[0].name = scan.next();
@@ -72,29 +83,58 @@ public class ClassArrayEx08_정답 {
 				
 				else {
 					
-					Subject[] temp = stdList[getStudentIndex].subjects;
+					Subject8[] temp = stdList[getStudentIndex].subjects;
 					
-					stdList[getStudentIndex].subjects = new Subject[temp.length + 1];
+					stdList[getStudentIndex].subjects = new Subject8[temp.length + 1];
 					
-					for (int i = 0; i < stdList[getStudentIndex].subjects.length; i++) {
+					for (int i = 0; i < temp.length; i++) {
 						
 						stdList[getStudentIndex].subjects[i] = temp[i];
 						
 					}
 					
+					stdList[getStudentIndex].subjects[stdList[getStudentIndex].subjects.length - 1] = new Subject8();
+					
 					System.out.print("[과목명] : ");
 					stdList[getStudentIndex].subjects[stdList[getStudentIndex].subjects.length - 1].name = scan.next();
 					
 				}
-				
-				
-				
+		
+				System.out.println( stdList[getStudentIndex].name + "의 [ 과목 리스트 ]");
+				for (int i = 0; i < stdList[getStudentIndex].subjects.length; i++) {
+					
+					System.out.println("[ " + (i+1) + " ]" + stdList[getStudentIndex].subjects[i].name);
+				}
 			}
+			
 			else if (choice == 3) {
 				
+			
+				System.out.println("[ 학생 리스트 ]");
+				for (int i = 0; i < stdCnt; i++) {
+					
+					System.out.println("[ " + (i+1) + " ]" + stdList[i].name);
+				}
+				System.out.print("학생 선택 : ");
+				int getStudentIndex = scan.nextInt() - 1;		//학생인덱스 
 				
 				
+				System.out.println("[ 과목 리스트 ]");
+				for (int i = 0; i < stdList[getStudentIndex].subjects.length; i++) {
+					
+					System.out.println("[ " + (i+1) + " ]" + stdList[getStudentIndex].subjects[i].name);
+				}
+				System.out.print("과목 선택 : ");
+				int getSubjectName = scan.nextInt() - 1; 	//과목 인덱스
 				
+				
+				System.out.print("점수 입력 : ");
+				stdList[getStudentIndex].subjects[getSubjectName].score = scan.nextInt();
+			
+				
+				System.out.println(stdList[getStudentIndex].name + "의 " +
+						stdList[getStudentIndex].subjects[getSubjectName].name + 
+						"과목의 점수 : "  + stdList[getStudentIndex].subjects[getSubjectName].score);
 			}
 			
 		}
