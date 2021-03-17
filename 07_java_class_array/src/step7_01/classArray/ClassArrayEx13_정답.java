@@ -1,5 +1,11 @@
 package step7_01.classArray;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 
@@ -88,7 +94,7 @@ class Manager{
 		boolean isOverlapped = false;
 		int overlappedIndex = -1;
 		
-		for (int i = 0; i < list.length; i++) {
+		for (int i = 0; i < stdCnt; i++) {
 			
 			if (list[i].id.equals(st.id)) {
 				
@@ -119,23 +125,20 @@ class Manager{
 	
 	String out_data() {
 		
-		String str = "";
+		String str  = "";
+		
 		
 		
 		if (stdCnt == 0) return str;
 		
 		else {
+			str += stdCnt + "\n";
 		
 			for (int i = 0; i < list.length; i++) {
 				
-				
-				str += "[ID] : ";
-				str += list[i].id + "\n";
-				str += "[PW] : ";
-				str += list[i].pw + "\n";
-				
+				str += list[i].id + "," + list[i].pw + "\n";
+	
 			}
-			
 			
 		}
 		
@@ -177,7 +180,7 @@ public class ClassArrayEx13_정답 {
 		
 		Scanner scan = new Scanner(System.in);
 		
-		// Manager manager = new Manager();
+		Manager manager = new Manager();
 		
 		while (true) {
 			
@@ -205,19 +208,138 @@ public class ClassArrayEx13_정답 {
 				System.out.print("[ID] : ");
 				String getId = scan.next();
 				
+				StudentEx student = new StudentEx();
+				student.id = getId;
 				
+				//중복 id 존재하는 경우
+				if ( -1 != manager.check_id(student)) {
+					
+					System.out.println(manager.list[manager.check_id(student)].id + "는 존재하는 아이디 입니다.");
+					continue;
+				}
+				
+				System.out.print("[PW] : ");
+				student.pw = scan.next();
+				
+				manager.add_StudentEx(student);
+				
+				
+			}
+			else if (sel == 2) {
+				
+				System.out.println("[탈퇴절차]");
+				System.out.print("[ID] : ");
+				
+				StudentEx temp = new StudentEx();
+				temp.id = scan.next();
+				
+				if ( manager.check_id(temp) == -1 ) {		//존재하지 않는 아이디
+					
+					System.out.println("존재하지 않는 아이디입니다.");
+					continue;
+				}
+				
+				//존재하는 경우 탈퇴진행
+				
+				System.out.print("[PW] : ");
+				if ( manager.list[manager.check_id(temp)].pw.equals(scan.next())) {
+					
+					StudentEx removedStudent = manager.remove_StudentEx(manager.check_id(temp));
+					System.out.println(removedStudent.id + " 탈퇴 성공");
+				}
+				
+				else System.out.println("비밀번호가 잘못되었습니다.");
 				
 				
 				
 			}
-			else if (sel == 2) {}
-			else if (sel == 3) {}
-			else if (sel == 4) {}
-			else if (sel == 5) {}
-			else if (sel == 6) {}
+			else if (sel == 3) {
+				
+				System.out.println("[ID순서로 정렬]");
+				manager.sort_data();
+				
+				manager.print_StudentEx();
+				
+			}
+			else if (sel == 4) {
+				
+				manager.print_StudentEx();
+				
+			}
+			else if (sel == 5) {
+				
+
+				FileWriter fw = null;
+				
+				try {
+					fw = new FileWriter("StudentList.txt");
+					
+					fw.write(manager.out_data());
+				} catch (IOException e) {e.printStackTrace();}
+				finally {
+					try {fw.close();} catch (IOException e) {e.printStackTrace();}
+				}
+				
+			
+				
+			}
+			else if (sel == 6) {
+				
+				File file = new File("StudentList.txt");
+				FileReader fr = null;
+				BufferedReader br = null;
+				
+				try {
+					fr = new FileReader(file);
+					br = new BufferedReader(fr);
+					
+					int countStudent = Integer.parseInt(br.readLine());
+					
+					StudentEx[] temp = new StudentEx[countStudent];
+					
+					int indexofTemp = 0;
+					
+					System.out.println(countStudent);
+					while (true) {
+					
+						String str = br.readLine();
+						if (str == null) break;
+						
+						System.out.println(indexofTemp);
+						temp[indexofTemp] = new StudentEx();
+						temp[indexofTemp].id = str.split(",")[0];
+						temp[indexofTemp].pw = str.split(",")[1];
+						
+						indexofTemp ++;
+					}
+					
+					manager.load_StudentEx(temp, countStudent);
+					
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} finally {
+					
+					try {
+						br.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					try {
+						fr.close();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				
+			}
 			else if (sel == 7) { 
 				break; 
 			}
+			System.out.println("\n");
 			
 		}
 
